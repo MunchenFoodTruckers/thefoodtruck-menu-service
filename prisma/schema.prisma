@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id          String     @id @default(uuid())
+  name        String
+  description String?
+  menuItems   MenuItem[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model MenuItem {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  price       Float
+  image       String?
+  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId  String
+  available   Boolean  @default(true)
+  dietary     String[] // e.g., ["vegan", "gluten-free"]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
